@@ -18,7 +18,7 @@ Thumbs.db
 .claude/
 skills-lock.json
 # private / not for the public repo
-images/
+/images/
 avaliacoes*.txt
 melhores-avaliacoes*.txt
 prompt*.md
