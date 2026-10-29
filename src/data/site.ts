@@ -1,5 +1,7 @@
 // Todo o conteúdo editável do site fica aqui (textos, links, serviços, horários e imagens).
 
+import fachada from '../assets/images/hero/fachada-manus-car.png';
+
 // Versão de teste: não indexável (meta robots noindex + robots.txt com Disallow).
 // TODO(dono): trocar para `true` quando o site oficial for ao ar com domínio próprio.
 export const SITE_INDEXABLE = false;
@@ -70,16 +72,22 @@ export const site = {
     { rotulo: 'Contato', href: '#contato' },
   ],
 
-  // TODO(dono): foto da oficina (pasta images/). Sem foto, o hero usa o fundo do tema.
+  // TODO(dono): foto própria em alta resolução (esta é uma captura da fachada, 1143 px) e confirmar a autorização de uso.
   hero: {
-    imagem: null as ImageMetadata | null,
-    alt: 'Manus Car Multimarcas',
+    imagem: fachada as ImageMetadata | null,
+    alt: 'Fachada da Manus Car Multimarcas, com a faixa dos serviços e carros estacionados na frente',
   },
 
   servicosTitulo: 'Serviços',
-  servicosIntro: 'Em breve você verá aqui os serviços da Manus Car. Enquanto isso, fale com a gente pelo WhatsApp.',
-  // TODO(dono): lista de serviços (e fotos). Não informados.
-  servicos: [] as Servico[],
+  servicosIntro: 'Serviços divulgados na fachada da oficina. Escolha o serviço e peça seu orçamento pelo WhatsApp.',
+  // Fonte: faixa da fachada. TODO(dono): confirmar a lista completa, descrições e fotos.
+  servicos: [
+    { titulo: 'Mecânica em geral', texto: '', icone: 'revisao' },
+    { titulo: 'Injeção eletrônica', texto: '', icone: 'injecao' },
+    { titulo: 'Geometria', texto: '', icone: 'suspensao' },
+    { titulo: 'Balanceamento', texto: '', icone: 'suspensao' },
+    { titulo: 'Manutenção preventiva', texto: '', icone: 'filtro' },
+  ] as Servico[],
 
   depoimentosTitulo: 'O que dizem nossos clientes',
 

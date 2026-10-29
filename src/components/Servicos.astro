@@ -32,7 +32,7 @@ import { site, linkWhatsapp } from '../data/site';
           </div>
           <div class="flex flex-1 flex-col p-5">
             <h3 class="text-xl font-semibold">{s.titulo}</h3>
-            <p class="mt-2 flex-1 text-sm text-mute">{s.texto}</p>
+            {s.texto ? <p class="mt-2 flex-1 text-sm text-mute">{s.texto}</p> : <div class="flex-1"></div>}
             <a
               href={linkWhatsapp(`Olá! Gostaria de um orçamento de ${s.titulo.toLowerCase()} na Manus Car.`)}
               class="link-u mt-2 inline-flex min-h-11 items-center self-start text-sm font-semibold text-race"
