@@ -1,0 +1,31 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { site, linkWhatsapp } from '../data/site';
+const ano = new Date().getFullYear();
+---
+
+<footer class="border-t border-white/10 bg-coal py-12 pb-28">
+  <div class="mx-auto grid max-w-6xl gap-8 px-4 md:grid-cols-3">
+    <div>
+      <Logo />
+      <p class="mt-4 text-sm text-mute">{site.especialidade}</p>
+    </div>
+    <nav aria-label="Rodapé">
+      <ul class="grid grid-cols-2 gap-2 text-sm">
+        {site.nav.map((i) => <li><a href={i.href} class="link-u inline-flex min-h-11 items-center text-white/80">{i.rotulo}</a></li>)}
+      </ul>
+    </nav>
+    <div class="text-sm text-white/80">
+      <p>{site.endereco.rua}, {site.endereco.bairro}<br />{site.endereco.cidade} — {site.endereco.uf}</p>
+      <p class="mt-2"><a href={`tel:${site.telefoneE164}`} class="link-u">{site.telefone}</a></p>
+      <div class="mt-4 flex gap-3">
+        {site.instagram && <a href={site.instagram.url} target="_blank" rel="noopener noreferrer" aria-label="Instagram da Manus Car (abre em nova aba)" class="grid h-11 w-11 place-items-center rounded-full border border-white/20 transition-[color,border-color] duration-200 hover:border-race hover:text-race"><Icon name="instagram" /></a>}
+        <a href={linkWhatsapp()} aria-label="WhatsApp da Manus Car" class="grid h-11 w-11 place-items-center rounded-full border border-white/20 transition-[color,border-color] duration-200 hover:border-race hover:text-race"><Icon name="whatsapp" /></a>
+      </div>
+    </div>
+  </div>
+  <p class="mx-auto mt-10 max-w-6xl px-4 text-xs text-mute">
+    © <span data-year>{ano}</span> Manus Car Multimarcas. Todos os direitos reservados.
+  </p>
+</footer>

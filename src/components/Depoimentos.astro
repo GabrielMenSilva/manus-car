@@ -1,0 +1,75 @@
+---
+import ReviewCard from './ReviewCard.astro';
+import { site } from '../data/site';
+import { reviews } from '../data/reviews';
+const a = site.avaliacao;
+const visiveis = reviews.filter((r) => !r.hidden);
+const destaques = visiveis.filter((r) => r.featured);
+const restantes = visiveis.filter((r) => !r.featured);
+---
+
+<section id="depoimentos" tabindex="-1" class="py-16 sm:py-24">
+  <div class="mx-auto max-w-6xl px-4">
+    <h2 class="reveal text-3xl font-bold sm:text-5xl">{site.depoimentosTitulo}</h2>
+
+    <div class="reveal mt-8 flex items-center gap-4">
+      <p class="font-display text-6xl font-bold text-race">{a.nota}</p>
+      <div>
+        <p class="text-xl tracking-widest text-race" aria-hidden="true">★★★★★</p>
+        <p class="text-white/80">{a.total} avaliações no Google</p>
+      </div>
+    </div>
+
+    <div class="reveal mt-6">
+      <h3 class="text-sm font-semibold text-mute">O que mais destacam</h3>
+      <ul class="mt-3 flex flex-wrap gap-2">
+        {site.destaquesGoogle.map((d) => (
+          <li class="rounded-full border border-white/15 bg-steel px-3 py-1 text-sm">{d.rotulo} <span class="text-race">{d.qtd}</span></li>
+        ))}
+      </ul>
+    </div>
+
+    {destaques.length > 0 && (
+    <div class="reveal mt-8">
+      <ul
+        data-carousel
+        aria-label="Avaliações em destaque"
+        tabindex="0"
+        class="relative flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-3 [scrollbar-width:none] sm:grid sm:grid-cols-2 sm:overflow-visible sm:pb-0 lg:grid-cols-3"
+      >
+        {destaques.map((r) => (
+          <li class="w-[85%] shrink-0 snap-start sm:w-auto"><ReviewCard review={r} /></li>
+        ))}
+      </ul>
+      <div class="mt-3 flex justify-end gap-2 sm:hidden">
+        <button type="button" data-carousel-prev aria-label="Avaliação anterior" class="btn btn-ghost !h-11 !w-11 !p-0 disabled:opacity-40"><span aria-hidden="true">‹</span></button>
+        <button type="button" data-carousel-next aria-label="Próxima avaliação" class="btn btn-ghost !h-11 !w-11 !p-0 disabled:opacity-40"><span aria-hidden="true">›</span></button>
+      </div>
+    </div>
+    )}
+
+    {restantes.length > 0 && (
+      <div class="mt-8">
+        <div id="mais-avaliacoes" data-more-panel data-open="false" class="more-panel">
+          <div class="relative overflow-hidden">
+            <ul class="grid gap-4 pb-1 sm:grid-cols-2 lg:grid-cols-3">
+              {restantes.map((r) => <li><ReviewCard review={r} /></li>)}
+            </ul>
+          </div>
+        </div>
+        <div class="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+          <button type="button" data-more-btn aria-expanded="false" aria-controls="mais-avaliacoes" class="btn btn-ghost more-btn">Ver mais avaliações</button>
+          <p class="text-sm text-mute" aria-live="polite">
+            Exibindo <span data-shown>{visiveis.length}</span> de {a.total} avaliações
+          </p>
+        </div>
+      </div>
+    )}
+
+    <div class="reveal mt-8 flex flex-col gap-3 sm:flex-row">
+      <a href={site.maps} target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Ver todas as avaliações no Google<span class="sr-only"> (abre em nova aba)</span></a>
+      <a href={site.maps} target="_blank" rel="noopener noreferrer" class="btn btn-primary">Avaliar a Manus Car<span class="sr-only"> (abre em nova aba)</span></a>
+    </div>
+
+  </div>
+</section>

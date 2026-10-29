@@ -1,0 +1,27 @@
+---
+import { nomeExibicao, iniciais, type Review } from '../data/reviews';
+import { site } from '../data/site';
+
+interface Props {
+  review: Review;
+}
+const { review } = Astro.props;
+---
+
+<figure class="flex h-full flex-col rounded-lg border border-white/10 bg-steel p-5">
+  <blockquote class="flex-1 text-white/90">
+    “{review.text}{review.truncated ? '…' : ''}”
+    {review.truncated && (
+      <a href={site.maps} target="_blank" rel="noopener noreferrer" class="link-u ml-1 whitespace-nowrap text-sm font-semibold text-race">
+        Ler no Google<span class="sr-only"> (abre em nova aba)</span>
+      </a>
+    )}
+  </blockquote>
+  <figcaption class="mt-4 flex items-center gap-3">
+    <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ink font-display text-sm text-race" aria-hidden="true">{iniciais(review.author)}</span>
+    <span class="min-w-0">
+      <span class="block font-semibold">{nomeExibicao(review.author)}</span>
+      {review.localGuide && <span class="block text-xs text-mute">Local Guide</span>}
+    </span>
+  </figcaption>
+</figure>

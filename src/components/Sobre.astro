@@ -1,0 +1,27 @@
+---
+import { site } from '../data/site';
+const s = site.sobre;
+---
+
+<section id="sobre" tabindex="-1" class="bg-coal py-16 sm:py-24">
+  <div class="mx-auto max-w-6xl px-4">
+    <div class="grid items-start gap-10 md:grid-cols-2">
+      <div class="reveal">
+        <h2 class="text-3xl font-bold sm:text-5xl">{s.titulo}</h2>
+        <p class="mt-2 font-display text-lg uppercase tracking-wide text-race">{site.especialidade}</p>
+        <div class="mt-5 space-y-4 text-white/80">
+          {s.textos.map((t) => <p>{t}</p>)}
+        </div>
+      </div>
+      <div class="reveal" style="--d:70ms">
+        <h3 class="text-xl font-semibold">O que os clientes destacam</h3>
+        <ul class="mt-4 space-y-3">
+          {s.diferenciais.map((d) => (
+            <li class="flex gap-3 text-white/85"><span class="mt-0.5 text-race" aria-hidden="true">✓</span>{d}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>

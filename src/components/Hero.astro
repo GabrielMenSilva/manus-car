@@ -1,0 +1,46 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import StatusAberto from './StatusAberto.astro';
+import { site, linkWhatsapp } from '../data/site';
+---
+
+<section id="inicio" tabindex="-1" class="relative isolate flex min-h-[100svh] items-end overflow-hidden">
+  {site.hero.imagem ? (
+    <>
+      <Picture
+        src={site.hero.imagem}
+        alt={site.hero.alt}
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1440, 2000]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        class="absolute inset-0 -z-20 h-full w-full object-cover"
+      />
+      <div class="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/70 to-ink/50" aria-hidden="true"></div>
+    </>
+  ) : (
+    <div class="absolute inset-0 -z-10 bg-gradient-to-br from-coal via-ink to-steel" aria-hidden="true"></div>
+  )}
+  <div class="absolute inset-x-0 top-0 -z-10 h-32 bg-gradient-to-b from-ink/80 to-transparent" aria-hidden="true"></div>
+
+  <div class="mx-auto w-full max-w-6xl px-4 pb-14 pt-28 sm:pb-20">
+    <h1 class="max-w-3xl text-4xl font-bold leading-[1.05] sm:text-6xl">
+      <span class="mb-2 block text-2xl text-race sm:text-3xl" translate="no">{site.nome}</span>
+      {site.slogan}
+    </h1>
+    <p class="mt-5 max-w-xl text-lg text-white/90">{site.especialidade}.</p>
+    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+      <a href={linkWhatsapp()} class="btn btn-primary"><Icon name="whatsapp" class="h-5 w-5" />Falar no WhatsApp</a>
+      <a href="#servicos" class="btn btn-ghost">Ver serviços</a>
+    </div>
+    <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+      <a href="#depoimentos" class="link-u inline-flex items-center gap-2 text-sm font-medium">
+        <span class="text-race" aria-hidden="true">★</span>
+        {site.avaliacao.nota} no Google, {site.avaliacao.total} avaliações
+      </a>
+      <StatusAberto />
+    </div>
+  </div>
+</section>

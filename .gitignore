@@ -1,0 +1,25 @@
+# dependencies and build
+node_modules/
+dist/
+.astro/
+# secrets
+.env
+.env.*
+.dev.vars*
+# hosting
+.vercel/
+.netlify/
+.wrangler/
+# system
+.DS_Store
+Thumbs.db
+# local agent skills (third-party, not part of the site)
+.agents/
+.claude/
+skills-lock.json
+# private / not for the public repo
+images/
+avaliacoes*.txt
+melhores-avaliacoes*.txt
+prompt*.md
+PROMPT*

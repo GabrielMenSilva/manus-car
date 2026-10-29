@@ -1,0 +1,65 @@
+---
+import Icon from './Icon.astro';
+import StatusAberto from './StatusAberto.astro';
+import { site, linkWhatsapp } from '../data/site';
+const e = site.endereco;
+---
+
+<section id="contato" tabindex="-1" class="py-16 sm:py-24">
+  <div class="mx-auto max-w-6xl px-4">
+    <h2 class="reveal text-3xl font-bold sm:text-5xl">Contato e localização</h2>
+
+    <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <li class="reveal rounded-lg border border-white/10 bg-steel p-5">
+        <Icon name="whatsapp" class="h-7 w-7 text-race" />
+        <h3 class="mt-3 text-lg font-semibold">WhatsApp</h3>
+        <a href={linkWhatsapp()} class="link-u mt-1 inline-block">{site.telefone}</a>
+      </li>
+      <li class="reveal rounded-lg border border-white/10 bg-steel p-5" style="--d:70ms">
+        <Icon name="phone" class="h-7 w-7 text-race" />
+        <h3 class="mt-3 text-lg font-semibold">Telefone</h3>
+        <a href={`tel:${site.telefoneE164}`} class="link-u mt-1 inline-block">{site.telefone}</a>
+      </li>
+      {site.instagram && (
+        <li class="reveal rounded-lg border border-white/10 bg-steel p-5" style="--d:140ms">
+          <Icon name="instagram" class="h-7 w-7 text-race" />
+          <h3 class="mt-3 text-lg font-semibold">Instagram</h3>
+          <a href={site.instagram.url} target="_blank" rel="noopener noreferrer" class="link-u mt-1 inline-block">{site.instagram.usuario}<span class="sr-only"> (abre em nova aba)</span></a>
+        </li>
+      )}
+      <li class="reveal rounded-lg border border-white/10 bg-steel p-5 sm:col-span-2 lg:col-span-1">
+        <Icon name="pin" class="h-7 w-7 text-race" />
+        <h3 class="mt-3 text-lg font-semibold">Endereço</h3>
+        <address class="mt-1 not-italic text-white/85">
+          {e.rua} — {e.bairro}<br />{e.cidade} — {e.uf}, CEP {e.cep}<br />
+          <span class="text-sm text-mute">Plus Code {e.plusCode}</span>
+        </address>
+      </li>
+      <li class="reveal rounded-lg border border-white/10 bg-steel p-5 sm:col-span-2" style="--d:70ms">
+        <Icon name="clock" class="h-7 w-7 text-race" />
+        <h3 class="mt-3 text-lg font-semibold">Horário de funcionamento</h3>
+        <dl class="mt-1 text-white/85">
+          {site.horarios.map((h) => (
+            <div class="flex gap-2"><dt>{h.rotulo}:</dt><dd class={h.abre ? 'font-semibold text-race' : 'text-mute'}>{h.texto}</dd></div>
+          ))}
+        </dl>
+        <p class="mt-2 text-sm text-mute">{site.horariosNota}</p>
+        <StatusAberto class="mt-3" />
+      </li>
+    </ul>
+
+    <div class="reveal mt-8 overflow-hidden rounded-lg border border-white/10">
+      <iframe
+        title="Mapa com a localização da Manus Car"
+        src={site.mapsEmbed}
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        class="h-80 w-full border-0 sm:h-96"
+      ></iframe>
+    </div>
+    <div class="reveal mt-4 flex flex-col gap-3 sm:flex-row">
+      <a href={site.maps} target="_blank" rel="noopener noreferrer" class="btn btn-primary"><Icon name="pin" class="h-5 w-5" />Como chegar<span class="sr-only"> (abre em nova aba)</span></a>
+      <a href={linkWhatsapp()} class="btn btn-ghost"><Icon name="whatsapp" class="h-5 w-5" />Falar no WhatsApp</a>
+    </div>
+  </div>
+</section>

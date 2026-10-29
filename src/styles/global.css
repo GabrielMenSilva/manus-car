@@ -1,0 +1,285 @@
+@import "tailwindcss";
+@import "@fontsource-variable/oswald";
+@import "@fontsource-variable/inter";
+
+@theme {
+  --font-display: "Oswald Variable", "Arial Narrow", Impact, sans-serif;
+  --font-sans: "Inter Variable", system-ui, sans-serif;
+  --color-ink: #0a0a0a;
+  --color-coal: #161616;
+  --color-steel: #262626;
+  --color-mute: #a3a3a3;
+  --color-race: #ff5a36;
+}
+
+/* Tokens de movimento: único lugar para ajustar curva e durações. */
+:root {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 200ms;
+  --dur-base: 350ms;
+  --dur-reveal: 600ms;
+  --header-h: 4rem;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-padding-top: calc(var(--header-h) + 0.5rem);
+    scrollbar-gutter: stable;
+  }
+  html.scroll-lock {
+    overflow: hidden;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+  body {
+    @apply bg-ink text-white font-sans antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display uppercase tracking-wide;
+    text-wrap: balance;
+  }
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-race);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  /* Alvos de foco programático (seções) não mostram anel. */
+  [tabindex="-1"]:focus {
+    outline: none;
+  }
+}
+
+@layer components {
+  .t-fast {
+    transition-property: color, background-color, border-color, transform, box-shadow, opacity;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded px-6 py-3.5 text-center font-display font-semibold uppercase tracking-wide;
+    transition-property: color, background-color, border-color, transform, box-shadow;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+  .btn:active {
+    transform: scale(0.98);
+  }
+  .btn-primary {
+    @apply bg-race text-ink;
+  }
+  .btn-ghost {
+    @apply border border-white/40 text-white;
+  }
+  @media (hover: hover) {
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgb(0 0 0 / 0.35);
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+    .btn-primary:hover {
+      background-color: #fff;
+    }
+    .btn-ghost:hover {
+      border-color: var(--color-race);
+      color: var(--color-race);
+    }
+  }
+
+  /* Link com sublinhado animado. */
+  .link-u {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0 1px;
+    transition: background-size var(--dur-base) var(--ease), color var(--dur-fast) var(--ease);
+  }
+  @media (hover: hover) {
+    .link-u:hover {
+      background-size: 100% 1px;
+    }
+  }
+
+  /* Zoom suave de fotos dentro de cards. */
+  .zoom {
+    overflow: hidden;
+  }
+  .zoom img {
+    transition: transform var(--dur-reveal) var(--ease);
+  }
+  @media (hover: hover) {
+    .zoom:hover img {
+      transform: scale(1.05);
+    }
+  }
+
+  /* Header */
+  .site-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgb(10 10 10 / 0.88);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgb(255 255 255 / 0.1);
+    opacity: 0;
+    transition: opacity var(--dur-base) var(--ease);
+  }
+  .site-header[data-scrolled="true"]::before,
+  .site-header[data-menu-open="true"]::before {
+    opacity: 1;
+  }
+  .nav-link {
+    @apply text-sm font-medium text-white/80;
+    transition: color var(--dur-fast) var(--ease);
+  }
+  .nav-link[aria-current="true"] {
+    color: var(--color-race);
+  }
+  @media (hover: hover) {
+    .nav-link:hover {
+      color: var(--color-race);
+    }
+  }
+
+  .menu-panel {
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    background: var(--color-ink);
+    border-top: 1px solid rgb(255 255 255 / 0.1);
+    opacity: 0;
+    transform: translateY(-8px);
+    visibility: hidden;
+    transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease), visibility 0s linear var(--dur-base);
+  }
+  .menu-panel[data-open="true"] {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .burger-bar {
+    display: block;
+    height: 2px;
+    width: 1.5rem;
+    background: currentColor;
+    border-radius: 1px;
+    transition: transform var(--dur-base) var(--ease), opacity var(--dur-fast) var(--ease);
+  }
+  [aria-expanded="true"] > .burger-bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  [aria-expanded="true"] > .burger-bar:nth-child(2) {
+    opacity: 0;
+  }
+  [aria-expanded="true"] > .burger-bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  /* Aparecer ao rolar: só esconde se o JS estiver ativo (classe "js" no html). */
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity var(--dur-reveal) var(--ease), transform var(--dur-reveal) var(--ease);
+    transition-delay: var(--d, 0ms);
+  }
+  .js .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* "Ver mais avaliações": altura animada via grid-template-rows. Sem JS, tudo fica visível. */
+  .js .more-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows var(--dur-base) var(--ease), visibility 0s linear var(--dur-base);
+  }
+  .js .more-panel[data-open="true"] {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+  .more-btn {
+    display: none;
+  }
+  .js .more-btn {
+    display: inline-flex;
+  }
+
+  /* Indicador aberto/fechado */
+  .status-dot {
+    height: 0.625rem;
+    width: 0.625rem;
+    border-radius: 9999px;
+    background: var(--color-mute);
+  }
+  [data-state="open"] .status-dot {
+    background: #4ade80;
+  }
+  [data-state="closed"] .status-dot {
+    background: #f87171;
+  }
+
+  /* Botão voltar ao topo */
+  .to-top {
+    opacity: 0;
+    transform: translateY(8px);
+    visibility: hidden;
+    transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease), visibility 0s linear var(--dur-base);
+  }
+  .to-top[data-visible="true"] {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  /* Lightbox */
+  dialog.lightbox {
+    overscroll-behavior: contain;
+    opacity: 0;
+    transform: scale(0.96);
+    transition: opacity var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+  }
+  dialog.lightbox.is-open {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .zoom:hover img,
+  .btn:hover,
+  .btn:active {
+    transform: none;
+  }
+}

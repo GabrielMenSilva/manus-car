@@ -1,0 +1,42 @@
+---
+import Logo from './Logo.astro';
+import { site, linkWhatsapp } from '../data/site';
+---
+
+<header data-header data-scrolled="false" data-menu-open="false" class="site-header fixed inset-x-0 top-0 z-50">
+  <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+    <a href="#inicio"><Logo /></a>
+
+    <nav aria-label="Principal" class="hidden lg:block">
+      <ul class="flex items-center gap-7">
+        {site.nav.map((i) => (
+          <li><a href={i.href} data-nav-link class="nav-link link-u">{i.rotulo}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <a href={linkWhatsapp()} class="btn btn-primary hidden !px-4 !py-2 text-sm lg:inline-flex">Falar no WhatsApp</a>
+
+    <button
+      data-menu-btn
+      type="button"
+      class="grid h-11 w-11 place-content-center gap-1.5 rounded border border-white/20 lg:hidden"
+      aria-label="Abrir menu"
+      aria-expanded="false"
+      aria-controls="menu-mobile"
+    >
+      <span class="burger-bar"></span>
+      <span class="burger-bar"></span>
+      <span class="burger-bar"></span>
+    </button>
+  </div>
+
+  <nav id="menu-mobile" data-menu data-open="false" aria-label="Menu mobile" class="menu-panel lg:hidden">
+    <ul class="mx-auto max-w-6xl px-4 py-2">
+      {site.nav.map((i) => (
+        <li><a href={i.href} data-nav-link class="nav-link block py-3 !text-lg">{i.rotulo}</a></li>
+      ))}
+      <li class="py-3"><a href={linkWhatsapp()} class="btn btn-primary w-full">Falar no WhatsApp</a></li>
+    </ul>
+  </nav>
+</header>

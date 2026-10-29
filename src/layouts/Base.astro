@@ -1,0 +1,84 @@
+---
+import { getImage } from 'astro:assets';
+import { site, SITE_INDEXABLE } from '../data/site';
+import '../styles/global.css';
+
+// Caminhos públicos respeitam o `base` do Astro, se houver.
+const withBase = (path: string) => `${import.meta.env.BASE_URL.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
+
+// TODO(dono): imagem Open Graph (usa a foto do hero quando existir).
+const og = site.hero.imagem ? await getImage({ src: site.hero.imagem, width: 1200, height: 630, fit: 'cover', format: 'jpg' }) : null;
+const origin = Astro.site ?? new URL('https://example.com');
+const canonical = new URL(withBase('/'), origin).href;
+const ogUrl = og ? new URL(og.src, origin).href : null;
+const e = site.endereco;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AutoRepair',
+  name: site.nome,
+  alternateName: site.nomeCompleto,
+  description: site.descricao,
+  url: canonical,
+  ...(ogUrl && { image: ogUrl }),
+  telephone: site.telefoneE164,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: e.rua,
+    addressLocality: e.cidade,
+    addressRegion: e.uf,
+    postalCode: e.cep,
+    addressCountry: 'BR',
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: e.lat, longitude: e.lng },
+  hasMap: site.maps,
+  ...(site.instagram && { sameAs: [site.instagram.url] }),
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '08:00',
+      closes: '18:00',
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{site.titulo}</title>
+    <meta name="description" content={site.descricao} />
+    <meta name="theme-color" content="#0a0a0a" />
+    <link rel="canonical" href={canonical} />
+    {!SITE_INDEXABLE && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content={site.nome} />
+    <meta property="og:title" content={site.titulo} />
+    <meta property="og:description" content={site.descricao} />
+    <meta property="og:url" content={canonical} />
+    {ogUrl && <meta property="og:image" content={ogUrl} />}
+    {ogUrl && <meta property="og:image:alt" content={site.hero.alt} />}
+    <meta name="twitter:card" content={ogUrl ? "summary_large_image" : "summary"} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <a
+      href="#conteudo"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:rounded focus:bg-race focus:px-4 focus:py-2 focus:font-semibold focus:text-ink"
+      >Ir para o conteúdo</a
+    >
+    <slot />
+    <script type="application/json" id="site-schedule" set:html={JSON.stringify({ tz: site.fusoHorario, horarios: site.horarios })} />
+    <script>
+      import '../scripts/motion';
+    </script>
+  </body>
+</html>

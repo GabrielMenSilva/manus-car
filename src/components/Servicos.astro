@@ -1,0 +1,46 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import { site, linkWhatsapp } from '../data/site';
+---
+
+<section id="servicos" tabindex="-1" class="bg-coal py-16 sm:py-24">
+  <div class="mx-auto max-w-6xl px-4">
+    <h2 class="reveal text-3xl font-bold sm:text-5xl">{site.servicosTitulo}</h2>
+    <p class="reveal mt-3 max-w-2xl text-mute">{site.servicosIntro}</p>
+
+    {site.servicos.length === 0 && (
+      <p class="reveal mt-10 rounded-lg border border-dashed border-white/20 bg-steel p-6 text-white/85">Lista de serviços em breve.</p>
+    )}
+
+    <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {site.servicos.map((s, i) => (
+        <li class="reveal flex flex-col overflow-hidden rounded-lg border border-white/10 bg-steel" style={`--d:${Math.min((i % 3) * 70, 400)}ms`}>
+          <div class="zoom h-44">
+            {s.imagem ? (
+              <Picture
+                src={s.imagem}
+                alt={s.alt ?? ''}
+                formats={['avif', 'webp']}
+                widths={[320, 480, 768]}
+                sizes="(min-width: 1024px) 360px, (min-width: 640px) 45vw, 100vw"
+                class="h-44 w-full object-cover"
+              />
+            ) : (
+              <div class="grid h-44 place-items-center bg-ink text-race"><Icon name={s.icone} class="h-14 w-14" /></div>
+            )}
+          </div>
+          <div class="flex flex-1 flex-col p-5">
+            <h3 class="text-xl font-semibold">{s.titulo}</h3>
+            <p class="mt-2 flex-1 text-sm text-mute">{s.texto}</p>
+            <a
+              href={linkWhatsapp(`Olá! Gostaria de um orçamento de ${s.titulo.toLowerCase()} na Manus Car.`)}
+              class="link-u mt-2 inline-flex min-h-11 items-center self-start text-sm font-semibold text-race"
+              >Pedir orçamento<span class="sr-only"> de {s.titulo}</span></a
+            >
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
